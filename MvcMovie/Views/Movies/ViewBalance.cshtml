@@ -1,0 +1,31 @@
+﻿@model MvcMovie.Models.CompassCardViewModel
+
+@{
+    ViewBag.Title = "ViewBalance";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>ViewBalance</h2>
+
+<div>
+    <h4>CompassCardViewModel</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Card Number
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.CardNumber)
+        </dd>
+
+        <dt>
+            Remaining Balance
+        </dt>
+        <dd>
+            @Html.DisplayFor(m => m.Balance)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
