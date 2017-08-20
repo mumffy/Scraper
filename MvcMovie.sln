@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper", "Scraper\Scraper.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper.Tests", "Scraper.Tests\Scraper.Tests.csproj", "{88DA417F-7174-4AA4-8024-E9342B6E6F4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamoDB_Intro", "DynamoDB_Intro\DynamoDB_Intro.csproj", "{5C310459-B5C7-4AA0-84E1-176FD6FECE70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "University", "University\University.csproj", "{D31EF77B-20C9-4D47-83FD-FD55F52FD080}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{88DA417F-7174-4AA4-8024-E9342B6E6F4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88DA417F-7174-4AA4-8024-E9342B6E6F4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88DA417F-7174-4AA4-8024-E9342B6E6F4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C310459-B5C7-4AA0-84E1-176FD6FECE70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C310459-B5C7-4AA0-84E1-176FD6FECE70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C310459-B5C7-4AA0-84E1-176FD6FECE70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C310459-B5C7-4AA0-84E1-176FD6FECE70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D31EF77B-20C9-4D47-83FD-FD55F52FD080}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D31EF77B-20C9-4D47-83FD-FD55F52FD080}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D31EF77B-20C9-4D47-83FD-FD55F52FD080}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D31EF77B-20C9-4D47-83FD-FD55F52FD080}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

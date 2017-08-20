@@ -53,6 +53,7 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
