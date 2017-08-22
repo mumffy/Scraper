@@ -175,6 +175,10 @@
     <Compile Include="Migrations\201708200416273_DepartmentNameColumnDisplay.Designer.cs">
       <DependentUpon>201708200416273_DepartmentNameColumnDisplay.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708212327151_DepartmentSProc.cs" />
+    <Compile Include="Migrations\201708212327151_DepartmentSProc.Designer.cs">
+      <DependentUpon>201708212327151_DepartmentSProc.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Department.cs" />
@@ -278,6 +282,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708200416273_DepartmentNameColumnDisplay.resx">
       <DependentUpon>201708200416273_DepartmentNameColumnDisplay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708212327151_DepartmentSProc.resx">
+      <DependentUpon>201708212327151_DepartmentSProc.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
