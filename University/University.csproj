@@ -183,12 +183,17 @@
     <Compile Include="Migrations\201708222131392_rowversionForDepartment.Designer.cs">
       <DependentUpon>201708222131392_rowversionForDepartment.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201708231950377_TphInheritanceForInstructorAndStudentFromPerson.cs" />
+    <Compile Include="Migrations\201708231950377_TphInheritanceForInstructorAndStudentFromPerson.Designer.cs">
+      <DependentUpon>201708231950377_TphInheritanceForInstructorAndStudentFromPerson.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Department.cs" />
     <Compile Include="Models\Enrollment.cs" />
     <Compile Include="Models\Instructor.cs" />
     <Compile Include="Models\OfficeAssignment.cs" />
+    <Compile Include="Models\Person.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AssignedCourseData.cs" />
@@ -292,6 +297,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201708222131392_rowversionForDepartment.resx">
       <DependentUpon>201708222131392_rowversionForDepartment.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201708231950377_TphInheritanceForInstructorAndStudentFromPerson.resx">
+      <DependentUpon>201708231950377_TphInheritanceForInstructorAndStudentFromPerson.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
