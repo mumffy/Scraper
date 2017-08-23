@@ -19,16 +19,14 @@ namespace University.Controllers
 
         public ActionResult About()
         {
-            //IQueryable<EnrollmentDateGroup> data =
-            //    from student in db.Students
-            //    group student by student.EnrollmentDate into dateGroup
-            //    select new EnrollmentDateGroup()
-            //    {
-            //        EnrollmentDate = dateGroup.Key,
-            //        StudentCount = dateGroup.Count()
-            //    };
-            IQueryable<EnrollmentDateGroup> data = db.Students.GroupBy(s => s.EnrollmentDate)
-                .Select(g => new EnrollmentDateGroup { EnrollmentDate = g.Key, StudentCount = g.Count() });
+            //IQueryable<EnrollmentDateGroup> data = db.Students.GroupBy(s => s.EnrollmentDate)
+            //    .Select(g => new EnrollmentDateGroup { EnrollmentDate = g.Key, StudentCount = g.Count() });
+            String query = 
+                "SELECT EnrollmentDate, COUNT(*) AS StudentCount " +
+                "FROM Person " +
+                "WHERE Discriminator = 'Student' " +
+                "GROUP BY EnrollmentDate ";
+            IEnumerable<EnrollmentDateGroup> data = db.Database.SqlQuery<EnrollmentDateGroup>(query);
 
             return View(data.ToList());
         }
