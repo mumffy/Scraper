@@ -244,3 +244,5 @@ ModelManifest.xml
 /Scraper.Tests/App.config
 /MvcMovie/CompassCard.config
 /FlaskWeb/env
+
+MvcMovie/CompassCard\.config
