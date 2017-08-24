@@ -4,18 +4,25 @@ using System.Data;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using University.DAL;
+using University.DAL.Repositories;
 using University.Models;
 
 namespace University.Controllers
 {
     public class StudentController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        //private SchoolContext db = new SchoolContext();
+        private IStudentRepository studentRepo;
+
+        public StudentController(IStudentRepository studentRepo)
+        {
+            this.studentRepo = studentRepo;
+        }
 
         // GET: Student
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -28,7 +35,9 @@ namespace University.Controllers
             }
             ViewBag.CurrentFilter = searchString;
 
-            var students = db.Students.Select(x => x);
+            //var students = db.Students.Select(x => x);
+            var students = studentRepo.GetAllStudents();
+
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -59,13 +68,13 @@ namespace University.Controllers
         }
 
         // GET: Student/Details/5
-        public ActionResult Details(int? id)
+        public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            Student student = await studentRepo.GetStudentByID(id.Value);
             if (student == null)
             {
                 return HttpNotFound();
@@ -90,8 +99,8 @@ namespace University.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Students.Add(student);
-                    db.SaveChanges();
+                    studentRepo.AddStudent(student);
+                    studentRepo.Save();
                     return RedirectToAction("Index");
                 }
             }
@@ -104,13 +113,13 @@ namespace University.Controllers
         }
 
         // GET: Student/Edit/5
-        public ActionResult Edit(int? id)
+        public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Student student = db.Students.Find(id);
+            Student student = await studentRepo.GetStudentByID(id.Value);
             if (student == null)
             {
                 return HttpNotFound();
@@ -123,14 +132,14 @@ namespace University.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPost(int? id)
+        public async Task<ActionResult> EditPost(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Student studentToUpdate = db.Students.Find(id);
+            Student studentToUpdate = await studentRepo.GetStudentByID(id.Value);
             if (studentToUpdate == null)
             {
                 string error = "Invalid StudentID";
@@ -143,7 +152,7 @@ namespace University.Controllers
             {
                 try
                 {
-                    db.SaveChanges();
+                    studentRepo.Save();
                     return View("Index");
                 }
                 catch (RetryLimitExceededException ex)
@@ -157,7 +166,7 @@ namespace University.Controllers
         }
 
         // GET: Student/Delete/5
-        public ActionResult Delete(int? id, bool? saveChangesError=false)
+        public async Task<ActionResult> Delete(int? id, bool? saveChangesError=false)
         {
             if (id == null)
             {
@@ -169,7 +178,7 @@ namespace University.Controllers
                 ViewBag.ErrorMessage = "Delete Failed!";
             }
 
-            Student student = db.Students.Find(id);
+            Student student = await studentRepo.GetStudentByID(id.Value);
             if (student == null)
             {
                 return HttpNotFound();
@@ -180,13 +189,13 @@ namespace University.Controllers
         // POST: Student/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                Student student = db.Students.Find(id);
-                db.Students.Remove(student);
-                db.SaveChanges();
+                Student student = await studentRepo.GetStudentByID(id);
+                studentRepo.DeleteStudent(student);
+                studentRepo.Save();
             }
             catch (RetryLimitExceededException ex)
             {
@@ -199,7 +208,7 @@ namespace University.Controllers
 
         protected override void Dispose(bool disposing)
         {
-            db.Dispose();
+            studentRepo.Dispose();
             base.Dispose(disposing);
         }
     }
