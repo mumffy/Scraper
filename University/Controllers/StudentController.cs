@@ -153,7 +153,7 @@ namespace University.Controllers
                 try
                 {
                     studentRepo.Save();
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException ex)
                 {
