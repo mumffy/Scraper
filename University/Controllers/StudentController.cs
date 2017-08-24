@@ -144,7 +144,7 @@ namespace University.Controllers
                 try
                 {
                     db.SaveChanges();
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException ex)
                 {
