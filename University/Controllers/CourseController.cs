@@ -14,9 +14,17 @@ namespace University.Controllers
         private SchoolContext db = new SchoolContext();
 
         // GET: Course
-        public ActionResult Index()
+        public ActionResult Index(int? SelectedDepartment)
         {
-            var courses = db.Courses.Include(c => c.Department);
+            var departments = db.Departments.OrderBy(d => d.Name).ToList();
+            ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", SelectedDepartment);
+            int departmentID = SelectedDepartment.GetValueOrDefault();
+
+            IQueryable<Course> courses = db.Courses
+                .Where(c => !SelectedDepartment.HasValue || c.DepartmentID == departmentID)
+                .OrderBy(c => c.CourseID)
+                .Include(c => c.Department);
+            string sql = courses.ToString(); // cheap way to inspect EF-generated SQL query without using EF Interceptor
             return View(courses.ToList());
         }
 
