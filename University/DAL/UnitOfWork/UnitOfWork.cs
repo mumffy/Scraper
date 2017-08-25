@@ -41,6 +41,11 @@ namespace University.DAL
             context.SaveChanges();
         }
 
+        public int ExecuteSqlCommand(string sql, params Object[] parameters)
+        {
+            return context.Database.ExecuteSqlCommand(sql, parameters);
+        }
+
         private bool disposed = false;
 
         protected virtual void Dispose(bool disposing)

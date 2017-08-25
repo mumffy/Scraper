@@ -11,19 +11,34 @@ namespace University.Controllers
 {
     public class CourseController : Controller
     {
-        private SchoolContext db = new SchoolContext();
+        private IUnitOfWork unitOfWork;
+
+        public CourseController()
+        {
+            this.unitOfWork = new UnitOfWork();
+        }
+
+        public CourseController(IUnitOfWork uow) 
+        {
+            this.unitOfWork = uow;
+        }
 
         // GET: Course
         public ActionResult Index(int? SelectedDepartment)
         {
-            var departments = db.Departments.OrderBy(d => d.Name).ToList();
+            var departments = unitOfWork.DepartmentRepository.Get(
+                orderBy: x => x.OrderBy(d => d.Name)
+                );
+
             ViewBag.SelectedDepartment = new SelectList(departments, "DepartmentID", "Name", SelectedDepartment);
             int departmentID = SelectedDepartment.GetValueOrDefault();
 
-            IQueryable<Course> courses = db.Courses
-                .Where(c => !SelectedDepartment.HasValue || c.DepartmentID == departmentID)
-                .OrderBy(c => c.CourseID)
-                .Include(c => c.Department);
+            var courses = unitOfWork.CourseRepository.Get(
+                filter: c => !SelectedDepartment.HasValue || c.DepartmentID == SelectedDepartment,
+                orderBy: x => x.OrderBy(c => c.CourseID),
+                includeProperties: "Department"
+                );
+
             string sql = courses.ToString(); // cheap way to inspect EF-generated SQL query without using EF Interceptor
             return View(courses.ToList());
         }
@@ -35,11 +50,13 @@ namespace University.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+
+            Course course = unitOfWork.CourseRepository.GetByID(id);
             if (course == null)
             {
                 return HttpNotFound();
             }
+
             return View(course);
         }
 
@@ -57,8 +74,8 @@ namespace University.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    db.Courses.Add(course);
-                    db.SaveChanges();
+                    unitOfWork.CourseRepository.Insert(course);
+                    unitOfWork.Save();
                     return RedirectToAction("Index");
                 }
             }
@@ -79,7 +96,7 @@ namespace University.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Course course = db.Courses.Find(id);
+            Course course = unitOfWork.CourseRepository.GetByID(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -99,12 +116,12 @@ namespace University.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            Course courseToUpdate = db.Courses.Find(id);
+            Course courseToUpdate = unitOfWork.CourseRepository.GetByID(id);
             if(TryUpdateModel(courseToUpdate, new string[] { "Title", "Credits", "DepartmentID" }))
             {
                 try
                 {
-                    db.SaveChanges();
+                     unitOfWork.Save();
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException dex)
@@ -120,7 +137,7 @@ namespace University.Controllers
 
         private void PopulateDepartmentDropDownList(object selectedDepartment = null)
         {
-            var deptsQuery = db.Departments.OrderBy(d => d.Name);
+            var deptsQuery = unitOfWork.DepartmentRepository.Get(orderBy: x => x.OrderBy(d => d.Name));
             ViewBag.DepartmentID = new SelectList(deptsQuery, "DepartmentID", "Name", selectedDepartment);
         }
 
@@ -131,7 +148,7 @@ namespace University.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
+            Course course = unitOfWork.CourseRepository.GetByID(id);
             if (course == null)
             {
                 return HttpNotFound();
@@ -144,9 +161,8 @@ namespace University.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Course course = db.Courses.Find(id);
-            db.Courses.Remove(course);
-            db.SaveChanges();
+            unitOfWork.CourseRepository.Delete(id);
+            unitOfWork.Save();
             return RedirectToAction("Index");
         }
 
@@ -154,7 +170,7 @@ namespace University.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                unitOfWork.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -169,7 +185,7 @@ namespace University.Controllers
         {
             if(multiplier != null)
             {
-                ViewBag.RowsAffected = db.Database.ExecuteSqlCommand("UPDATE Course SET Credits = Credits * {0}", multiplier);
+                ViewBag.RowsAffected = unitOfWork.ExecuteSqlCommand("UPDATE Course SET Credits = Credits * {0}", multiplier);
             }
             return View();
         }
