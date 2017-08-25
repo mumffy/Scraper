@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 using System.Data.Entity;
-using ContosoUniversity.Models;
 using System.Linq.Expressions;
 
-namespace ContosoUniversity.DAL
+namespace University.DAL.Repositories
 {
     public class GenericRepository<TEntity> where TEntity : class
     {
