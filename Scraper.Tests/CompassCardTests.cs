@@ -1,5 +1,7 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 
 namespace Scraper.Tests
 {
@@ -7,7 +9,10 @@ namespace Scraper.Tests
     public class CompassCardTests
     {
         public const string Url = @"https://compasscard.511sd.com";
+        private readonly string password = ConfigurationManager.AppSettings["secretPassword"];
+        private readonly List<string> cardNumbers = new List<string>(ConfigurationManager.AppSettings["cardNumberCsv"].Split(','));
         CompassCard scraper;
+
         public CompassCardTests()
         {
             scraper = new CompassCard();
@@ -35,9 +40,10 @@ namespace Scraper.Tests
         [TestMethod]
         public void LoginTest()
         {
-            float content = scraper.LoginToSummaryPage();
-            //Assert.IsTrue(content.Contains(@"<span id=""navText"">Summary of my card</span>"));
-            Assert.AreEqual(9.25, content);
+            float bal1 = scraper.GetRemainingBalance(cardNumbers[0], password);
+            Assert.AreEqual(9.25, bal1);
+            float bal2 = scraper.GetRemainingBalance(cardNumbers[1], password);
+            Assert.AreEqual(5.50, bal2);
         }
     }
 }

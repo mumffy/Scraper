@@ -7,12 +7,16 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using MvcMovie.Models;
+using Scraper;
+using System.Configuration;
 
 namespace MvcMovie.Controllers
 {
     public class MoviesController : Controller
     {
         private MovieDbContext db = new MovieDbContext();
+        private readonly string password = ConfigurationManager.AppSettings["secretPassword"];
+        private readonly List<string> cardNumbers = new List<string>(ConfigurationManager.AppSettings["cardNumberCsv"].Split(','));
 
         // GET: Movies
         public ActionResult Index(string searchString, string genreName)
@@ -49,6 +53,7 @@ namespace MvcMovie.Controllers
         }
 
         // GET: Movies/Create
+        [Authorize]
         public ActionResult Create()
         {
             return View();
@@ -100,6 +105,13 @@ namespace MvcMovie.Controllers
                 return RedirectToAction("Index");
             }
             return View(movie);
+        }
+
+        public ActionResult ViewBalance()
+        {
+            float balance = new CompassCard().GetRemainingBalance(cardNumbers[0], password);
+            CompassCardViewModel cc = new CompassCardViewModel { CardNumber=cardNumbers[0], Balance=balance, NickName="myNickName" };
+            return View(cc);
         }
 
         // GET: Movies/Delete/5
