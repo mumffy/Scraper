@@ -38,9 +38,9 @@ namespace University.DAL.Repositories
             return context.Students.ToList();
         }
 
-        public void Save()
+        public Task<int> Save()
         {
-            context.SaveChangesAsync();
+            return context.SaveChangesAsync();
         }
 
         public void UpdateStudent(Student student)

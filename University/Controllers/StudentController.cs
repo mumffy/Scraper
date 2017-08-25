@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using University.DAL;
 using University.DAL.Repositories;
 using University.Models;
 
@@ -15,6 +16,11 @@ namespace University.Controllers
     {
         //private SchoolContext db = new SchoolContext();
         private IStudentRepository studentRepo;
+
+        public StudentController()
+        {
+            this.studentRepo = new StudentRepository(new SchoolContext());
+        }
 
         public StudentController(IStudentRepository studentRepo)
         {
@@ -152,7 +158,7 @@ namespace University.Controllers
             {
                 try
                 {
-                    studentRepo.Save();
+                    await studentRepo.Save();
                     return RedirectToAction("Index");
                 }
                 catch (RetryLimitExceededException ex)

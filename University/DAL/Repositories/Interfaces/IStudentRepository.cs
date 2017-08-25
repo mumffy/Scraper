@@ -14,6 +14,6 @@ namespace University.DAL.Repositories
         void AddStudent(Student student);
         void DeleteStudent(Student student);
         void UpdateStudent(Student student);
-        void Save();
+        Task<int> Save();
     }
 }
