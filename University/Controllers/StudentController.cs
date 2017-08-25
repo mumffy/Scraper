@@ -28,7 +28,7 @@ namespace University.Controllers
         }
 
         // GET: Student
-        public async Task<ActionResult> Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.NameSortParam = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
@@ -201,7 +201,7 @@ namespace University.Controllers
             {
                 Student student = await studentRepo.GetStudentByID(id);
                 studentRepo.DeleteStudent(student);
-                studentRepo.Save();
+                await studentRepo.Save();
             }
             catch (RetryLimitExceededException ex)
             {
