@@ -4,7 +4,7 @@ using University.Models;
 
 namespace University.DAL
 {
-    public class UnitOfWork : IDisposable
+    public class UnitOfWork : IUnitOfWork, IDisposable
     {
         private SchoolContext context = new SchoolContext();
         private GenericRepository<Department> departmentRepository;
